@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard - AchieveTrack</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Space Theme Background */
+        body {
+            background: radial-gradient(ellipse at bottom, #000011 0%, #000022 100%);
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #0b0c2a !important;
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+
+        /* Cards - Transparent & Neon */
+        .card {
+            background-color: rgba(20, 20, 50, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0,255,255,0.2);
+        }
+        .card .card-title, .card-text {
+            color: #fff;
+        }
+
+        /* Stats Cards */
+        .stat-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(0,255,255,0.5);
+        }
+
+        /* My Records Table Container */
+        .records-card {
+    background-color: rgba(0, 0, 0, 0.0); /* Fully transparent card */
+    border: none; /* Remove white border */
+}
+
+.table-responsive {
+    background-color: rgba(0, 0, 0, 0.0); /* Fully transparent table container */
+    padding: 0; /* Optional: remove extra padding */
+}
+
+table {
+    color: #fff; /* Keep text white */
+    background-color: transparent; /* Ensure table is transparent */
+}
+
+table thead tr {
+    background-color: rgba(255, 255, 255, 0.1); /* Slight transparent header for readability */
+}
+
+table tbody tr:hover {
+    background-color: rgba(0, 255, 255, 0.1); /* Keep hover effect subtle */
+}
+
+        /* Modal */
+        .modal-content {
+            background-color: rgba(10, 10, 30, 0.9);
+            color: #fff;
+            border: 1px solid rgba(0,255,255,0.3);
+            box-shadow: 0 0 20px rgba(0,255,255,0.4);
+        }
+
+        /* Falling Stars */
+        .star {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            opacity: 1;
+            width: 2px;
+            height: 2px;
+            box-shadow: 0 0 6px #ffffff, 0 0 10px #ffffff;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10px) translateX(0); opacity: 1; }
+            100% { transform: translateY(110vh) translateX(50px); opacity: 0; }
+        }
+
+        /* Badge Neon Glow */
+        .badge-success {
+            background-color: #00ffcc !important;
+            color: #000;
+            box-shadow: 0 0 8px #00ffcc;
+        }
+        .badge-warning {
+            background-color: #ffcc00 !important;
+            color: #000;
+            box-shadow: 0 0 8px #ffcc00;
+        }
+
+        /* Buttons */
+        .btn-success, .btn-primary {
+            box-shadow: 0 0 10px rgba(0,255,255,0.4);
+        }
+        .btn-info {
+            box-shadow: 0 0 8px #00ccff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Falling stars -->
+    <div id="stars"></div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">AchieveTrack</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Welcome, [Student Name]!</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>My Achievements</h2>
+            <div>
+                <button id="submitAchievement" class="btn btn-success me-2">Submit New Achievement</button>
+                <button id="generatePDF" class="btn btn-primary">Generate Portfolio (PDF)</button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card stat-card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Achievements</h5>
+                        <p class="card-text fs-2 fw-bold">12</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stat-card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Pending Approval</h5>
+                        <p class="card-text fs-2 fw-bold">2</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stat-card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Top Category</h5>
+                        <p class="card-text fs-2 fw-bold">Sports</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Records Card -->
+        <div class="card records-card mb-4">
+            <div class="card-body">
+                <h5 class="card-title" style="color:#fff;">My Records</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Event Name</th>
+                                <th>Category</th>
+                                <th>Title/Award</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>National Robotics Olympiad</td>
+                                <td>Technical</td>
+                                <td>1st Place Winner</td>
+                                <td>2025-08-15</td>
+                                <td><span class="badge bg-success">Approved</span></td>
+                                <td><a href="#" class="btn btn-sm btn-info">View</a></td>
+                            </tr>
+                            <tr>
+                                <td>Inter-College Debate</td>
+                                <td>Cultural</td>
+                                <td>Participant</td>
+                                <td>2025-07-20</td>
+                                <td><span class="badge bg-success">Approved</span></td>
+                                <td><a href="#" class="btn btn-sm btn-info">View</a></td>
+                            </tr>
+                            <tr>
+                                <td>Community Cleanup Drive</td>
+                                <td>Volunteering</td>
+                                <td>Volunteer</td>
+                                <td>2025-09-05</td>
+                                <td><span class="badge bg-warning">Pending</span></td>
+                                <td><a href="#" class="btn btn-sm btn-info">View</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for Viewing Records -->
+    <div class="modal fade" id="viewModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-dark text-white">
+            <h5 class="modal-title">Achievement Details</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p><strong>Event:</strong> <span id="viewEvent"></span></p>
+            <p><strong>Category:</strong> <span id="viewCategory"></span></p>
+            <p><strong>Title/Award:</strong> <span id="viewTitle"></span></p>
+            <p><strong>Date:</strong> <span id="viewDate"></span></p>
+            <p><strong>Status:</strong> <span id="viewStatus"></span></p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Falling Stars
+        const starsContainer = document.getElementById('stars');
+        const numStars = 70;
+        for(let i = 0; i < numStars; i++){
+            let star = document.createElement('div');
+            star.className = 'star';
+            star.style.top = Math.random() * window.innerHeight + 'px';
+            star.style.left = Math.random() * window.innerWidth + 'px';
+            star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+            star.style.animationDuration = Math.random() * 5 + 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Button Handlers
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("submitAchievement").addEventListener("click", () => {
+                alert("📝 Redirecting to achievement submission form...");
+            });
+            document.getElementById("generatePDF").addEventListener("click", () => {
+                alert("📄 Generating Portfolio PDF...");
+            });
+
+            const viewModal = new bootstrap.Modal(document.getElementById("viewModal"));
+            document.querySelectorAll(".btn-info").forEach(button => {
+                button.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    const row = this.closest("tr");
+                    document.getElementById("viewEvent").textContent = row.cells[0].textContent;
+                    document.getElementById("viewCategory").textContent = row.cells[1].textContent;
+                    document.getElementById("viewTitle").textContent = row.cells[2].textContent;
+                    document.getElementById("viewDate").textContent = row.cells[3].textContent;
+                    document.getElementById("viewStatus").textContent = row.cells[4].innerText;
+                    viewModal.show();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
